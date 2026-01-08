@@ -6,12 +6,19 @@ import MediaRouter from './media/routes/media.route.js';
 import chatRouter from './chat/routes/chat.route.js';
 import UserRouter from './user/routes/user.route.js';
 import cors from 'cors'
+import { ensureDBConnection } from '../config/ensureDBConnection.js';
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT;
+if(!PORT) {
+    throw new Error('PORT is not defined');
+}
 
 
-console.log('NODE_ENV',process.env.NODE_ENV);
+
+
+
 
 
 app.use(cors({
@@ -20,6 +27,14 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+if(process.env.NODE_ENV === 'production'){
+  app.use(ensureDBConnection);
+}
+
+
+
+
 
 app.use((req, _res, next) => {
   const time = new Date().toLocaleString("en-IN", {
@@ -36,7 +51,7 @@ app.use("/api/chats",chatRouter)
 app.use('/api/users',UserRouter);
 
 
-app.get('/ping-pong', (req, res:Response) => {
+app.get('/', (req, res:Response) => {
     return res.status(200).json({
         success:true,
         response:"hello world 💘🫂"
@@ -46,44 +61,15 @@ app.get('/ping-pong', (req, res:Response) => {
 
 //IMAGEKIT.IO CHECKING SETUP 
 
-app.get('/imagekit/api/upload', (req, res:Response) => {
-  
-    try {
-        // console.log("Runtime:", process.release?.name);
-    
-        const result= imageKitIOClient.getAuthenticationParameters();
-    
-    
-        //   const { token, expire, signature } = imageKitIOClient.helper.getAuthenticationParameters();
-    // app.get("/imagekit-signature", (req, res) => {
-    //   const authParams = imagekit.getAuthenticationParameters();
-    //   res.json(authParams);
-    // });
-    
-
-    
-    
-        return res.status(200).json({
-            success:true,
-            data:result ?? null,
-            response:"hello world 💘🫂"
-        });
-    } catch (error) {
-        
-    }
-})
 
 //for local env
 if(process.env.NODE_ENV !== 'production'){
-    const PORT = process.env.PORT || 4000;
-
      (async () => {
     await connectDB(); // 🔥 FIRST
     app.listen(PORT, () => {
       console.log(`Server running at http://localhost:${PORT}`);
     });
   })();
-
 }
 else{
  connectDB().catch((error) => {

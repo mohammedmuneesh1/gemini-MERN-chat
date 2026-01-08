@@ -34,3 +34,33 @@ export async function MEDIA_IMAGEKIT_DELETE_BY_FILE_ID_CONTROLLER(req:Request,re
 
   return ResponseHandler(res,200,true,null,"Image Deleted Successfully");
 }
+
+
+
+
+// app.get('/imagekit/api/upload', (req, res:Response) => {
+  
+//     try {
+//         // console.log("Runtime:", process.release?.name);
+    
+//         const result= imageKitIOClient.getAuthenticationParameters();
+    
+    
+//         //   const { token, expire, signature } = imageKitIOClient.helper.getAuthenticationParameters();
+//     // app.get("/imagekit-signature", (req, res) => {
+//     //   const authParams = imagekit.getAuthenticationParameters();
+//     //   res.json(authParams);
+//     // });
+    
+
+    
+    
+//         return res.status(200).json({
+//             success:true,
+//             data:result ?? null,
+//             response:"hello world 💘🫂"
+//         });
+//     } catch (error) {
+        
+//     }
+// })
