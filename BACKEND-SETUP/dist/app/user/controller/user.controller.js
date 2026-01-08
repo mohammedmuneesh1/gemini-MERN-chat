@@ -139,6 +139,7 @@ export async function UPDATE_USER_PROFILE_BY_ID(req, res) {
         return ResponseHandler(res, 200, true, null, "User not found");
     }
     const token = generateToken({
+        //@ts-ignore
         id: updatedUser._id,
         name: updatedUser.name,
     }, "30d");

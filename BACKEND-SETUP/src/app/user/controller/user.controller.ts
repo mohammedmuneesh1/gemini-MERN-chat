@@ -225,6 +225,7 @@ export async function UPDATE_USER_PROFILE_BY_ID(
 
   const token = generateToken(
     {
+      //@ts-ignore
       id: updatedUser._id as string,
       name: updatedUser.name,
     },

@@ -15,7 +15,6 @@ const LoginModal= () => {
 
 
 
-  if (!openLoginModal) return null;
 
 const googleLogin = useGoogleLogin({
   flow: "auth-code", // IMPORTANT
@@ -47,6 +46,8 @@ const googleLogin = useGoogleLogin({
 
 
 
+
+if (!openLoginModal) return null;
 
 
   return (
