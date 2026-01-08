@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+
+
+@theme {
+  --breakpoint-xs: 480px;
+  --breakpoint-3xl:2160px;
+  --breakpoint-tablet: 900px;
+  --breakpoint-desktop: 1400px;
+  --max-width-screen-3xl: 2160px;
+  --color-primary: #0e0c16;
+  --color-primary2: #12101b;
+  --color-primary3: #2c2937;
+  --color-blue: #217bfe;
+  --color-gray: #888;
+  /*  #2C2937*/
+
+}
+
+
+body{
+    /* background-color: #0e0c16; */
+    color:#ececec;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding:0px;
+    margin:0px;
+    box-sizing: border-box;
+}
+
+/* 
+a{
+    text-decoration:none;
+    color: inherit;
+} */
+
+
+
+.layoutWidth{
+   @apply max-w-[2160px] w-full  px-[18px] sm:px-[28px] md:px-[36px] lg:px-[44px] mx-auto ;
+}
+
+.layoutPaddingTop{
+    @apply pt-[10vh]
+}
+
+
+
+
+
+/*------------------------------------- HOME PAGE LINEAR GRADIENT START -------------------------------------*/
+
+/* ⚠️ THE CODE TO BRING LINEAR GRADIENT TO THE TEXT IS HERE ⚠️ */
+.homePageH1{
+    background:linear-gradient(to right, #217bfe,#e55571);
+    background-clip:text;
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.homePageOrbital{
+    animation:rotateOrbital 100s linear infinite alternate;
+}
+
+@keyframes rotateOrbital{
+     0%{
+        transform:rotate(0deg);
+     }
+     100%{
+        transform:rotate(60deg);
+     }
+}
+
+
+
+
+.homePageBotAnimation{
+    animation:botAnimate 3s ease-in-out infinite alternate ; 
+    
+}
+
+@keyframes botAnimate{
+     0%{
+        transform: scale(1) rotate(0deg);
+     }
+     100%{
+        transform:scale(1.1) rotate(-5deg);
+     }
+}
+
+
+
+.homePagerightContainerBgAnimation{
+    animation:slideBg 8s ease-in-out infinite alternate;
+}
+
+
+@keyframes slideBg{
+     0%{
+        transform: translateX(0);
+     }
+     100%{
+        transform:translateX(-50%);
+     }
+}
+
+/*------------------------------------- HOME PAGE LINEAR GRADIENT END -------------------------------------*/
+
+/*------------------------------------- SCROLL-BAR STYLE START -------------------------------------*/
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #555 transparent;
+}
+
+/*------------------------------------- SCROLL-BAR STYLE END -------------------------------------*/
