@@ -1,4 +1,3 @@
-import React, { useEffect, useRef } from 'react'
 import NewPrompt from '../../components/NewPrompt';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../../config/axiosInstance';

@@ -51,7 +51,7 @@ const NewPrompt:React.FC<NewPromptInterface> = ({dbData}) => {
       inlineData:{}
     },
   })
-    const endRef = useRef<HTMLDivElement | null>(null);
+  const endRef = useRef<HTMLDivElement | null>(null);
 
 
   useEffect(()=>{
@@ -294,7 +294,7 @@ const hasInitialRun = useRef<boolean>(false);
 
 useEffect(()=>{
   if(!hasInitialRun?.current){
-    if(dbData && dbData?.length && dbData[0]?.history && dbData[0]?.history?.length === 0  && dbData[0]?.history[0]?.role === "user" ) {
+    if(dbData && dbData?.length && dbData[0]?.history && dbData[0]?.history?.length === 1  && dbData[0]?.history[0]?.role === "user" ) {
       newPromptSubmitFn(dbData[0]?.history[0]?.parts[0]?.text as string,true);
     }
   }

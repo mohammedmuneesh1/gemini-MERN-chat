@@ -1,19 +1,53 @@
 
 import React from "react";
 import useAppContext from "../context/useContext";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../config/axiosInstance";
+import toast from "react-hot-toast";
+
 
 
 const LoginModal= () => {
 
     const {openLoginModal,setOpenLoginModal} = useAppContext();
+    const navigate = useNavigate();
+
 
 
   if (!openLoginModal) return null;
 
-  const handleGoogleLogin = () => {
-    console.log("Google login clicked");
-    // plug your OAuth logic here
-  };
+const googleLogin = useGoogleLogin({
+  flow: "auth-code", // IMPORTANT
+  onSuccess: async (response) => {
+    // response.code ← THIS is what you send to backend
+    const res =  await axiosInstance.post("/api/users/login", {
+      code: response.code,
+    });
+    if(res?.data?.success){
+        localStorage.setItem("token", res?.data?.data?.token);
+        if(res?.data?.data?.isAdmin){
+            navigate("/");
+        }
+        else{
+        navigate("/user/dashboard/bookings");
+        }
+        toast.success("Welcome Back");
+    }
+    else{
+        toast.error(res?.data?.response ?? "Technical Issue in login. Please try again later.");
+
+    }
+  },
+
+  onError: () => {
+    console.error("Google login failed");
+  },
+});
+
+
+
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
@@ -31,7 +65,7 @@ const LoginModal= () => {
         </h2>
 
         <button
-          onClick={handleGoogleLogin}
+          onClick={googleLogin}
           className="w-full flex items-center justify-center gap-3 rounded-lg
                      border border-gray-200/20
                      hover:border-gray-200

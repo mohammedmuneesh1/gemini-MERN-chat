@@ -6,6 +6,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import LoginModal from "../../components/LoginModal";
 
 
 const queryClient = new QueryClient()
@@ -20,10 +21,9 @@ const RootLayout = () => {
 
   return (
        <QueryClientProvider client={queryClient}>
-
-
+        <LoginModal/>
+        
     <div className="h-screen flex flex-col ">
-
       {/* HEADER START */}
       <header className="bg-primary" >
         <div
