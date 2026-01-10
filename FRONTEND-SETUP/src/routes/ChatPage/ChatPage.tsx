@@ -37,29 +37,7 @@ console.log('res data',data)
 
 
 
-// const triggerFn = ()=>{
 
-//   if(data && data?.history){
-//     console.log('value exist');
-//     return false;
-//   }
-//   return false
-
-//           // {
-//           //  data && data?.history && (
-//           //    data?.map((val:ChatHistoryItem)=>{
-
-
-
-//           //    }
-//           //   )
-
-//           //  )
-           
-
-
-//           // }
-// }
 
 
 
@@ -85,7 +63,7 @@ if(isLoading){
          className="flex-1 w-full flex justify-center overflow-y-auto overscroll-contain scrollbar-hid"
        >
         <div id="chat"
-         className="w-[95%] sm:w-[90%]  flex flex-col
+         className="w-[95%] sm:w-[90%]  flex flex-col gap-2
            text-sm sm:text-base"
         //  className="w-[50%] bg-blue-500 flex flex-col "
         >
@@ -98,11 +76,13 @@ if(isLoading){
                 item?.history?.map((val:ChatHistoryItem,index:number)=>
                           {
 
+if (!Array.isArray(val.parts) || val.parts.length === 0) {
+    return null;
+  }
+
 
               if(val?.role === "user"){
                 return(
-
-
           <div
           key={`${val?.role}-${index}`}
           className='flex flex-col  items-end gap-2'>
@@ -198,3 +178,37 @@ if(isLoading){
 }
 
 export default ChatPage
+
+
+
+
+
+
+
+
+
+
+
+// const triggerFn = ()=>{
+
+//   if(data && data?.history){
+//     console.log('value exist');
+//     return false;
+//   }
+//   return false
+
+//           // {
+//           //  data && data?.history && (
+//           //    data?.map((val:ChatHistoryItem)=>{
+
+
+
+//           //    }
+//           //   )
+
+//           //  )
+           
+
+
+//           // }
+// }

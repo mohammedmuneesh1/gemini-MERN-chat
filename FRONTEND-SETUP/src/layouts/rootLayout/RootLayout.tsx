@@ -131,7 +131,7 @@ onClick={()=>navigate("/dashboard")}
       </header>
       {/* HEADER END */}
 
-      <main className="flex-1 oveflow-hidden bg-red-400 ">
+      <main className="flex-1 oveflow-hidden ">
         <Outlet />
       </main>
 

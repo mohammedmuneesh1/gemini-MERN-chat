@@ -3,8 +3,9 @@ import React from "react";
 import useAppContext from "../context/useContext";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../config/axiosInstance";
+import axiosInstance, { errorManagement } from "../config/axiosInstance";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 
 
@@ -12,35 +13,41 @@ const LoginModal= () => {
 
     const {openLoginModal,setOpenLoginModal} = useAppContext();
     const navigate = useNavigate();
-
+  
 
 
 
 const googleLogin = useGoogleLogin({
   flow: "auth-code", // IMPORTANT
   onSuccess: async (response) => {
-    // response.code ← THIS is what you send to backend
-    const res =  await axiosInstance.post("/api/users/login", {
-      code: response.code,
-    });
-    if(res?.data?.success){
-        localStorage.setItem("token", res?.data?.data?.token);
-        if(res?.data?.data?.isAdmin){
-            navigate("/");
-        }
-        else{
-        navigate("/user/dashboard/bookings");
-        }
-        toast.success("Welcome Back");
-    }
-    else{
-        toast.error(res?.data?.response ?? "Technical Issue in login. Please try again later.");
 
+    try {
+      // response.code ← THIS is what you send to backend
+      const res =  await axiosInstance.post("/api/users/login", {
+        code: response.code,
+      });
+      if(res?.data?.success){
+          localStorage.setItem("token", res?.data?.data?.token);
+          setOpenLoginModal(false);
+          toast.success("Welcome Back");
+          return navigate("/dashboard");
+      }
+      else{
+          toast.error(res?.data?.response ?? "Technical Issue in login. Please try again later.");
+  
+      }
     }
+
+catch (error) {
+  const backendMessage = errorManagement(error);
+  toast.error(backendMessage);
+}
+
+
   },
 
   onError: () => {
-    console.error("Google login failed");
+    toast.error("Google login failed");
   },
 });
 

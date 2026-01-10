@@ -25,14 +25,6 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "/sign-in/*",
-        element: <SignInPage />,
-      },
-      {
-        path: "/sign-up/*",
-        element: <SignUpPage />,
-      },
-      {
         element: <UserMiddleware />, // Add middleware here
         children: [
           {

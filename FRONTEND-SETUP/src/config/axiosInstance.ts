@@ -3,6 +3,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 // Create axios instance
 const axiosInstance = axios.create({
+
   baseURL: import.meta.env.VITE_API_BASE_URL, // e.g. http://localhost:8080/api
   withCredentials: true, // keep true if you use cookies / sessions
   timeout: 10000,
@@ -37,10 +38,26 @@ axiosInstance.interceptors.response.use(
       // token expired / invalid
       localStorage.removeItem("token");
       // optional redirect
-      window.location.href = "/login";
+      window.location.href = "/";
     }
     return Promise.reject(error);
   }
 );
 
 export default axiosInstance;
+
+
+
+
+export const errorManagement = (error:unknown)=>{
+    if (axios.isAxiosError(error)) {
+    const backendMessage =
+      error.response?.data?.response || // in case you named it differently
+      error.message;
+    return backendMessage;
+  } else if (error instanceof Error) {
+    return error.message
+  } else {
+    return `Technical issue occured. Please refresh the page and try again later.`
+  }
+}

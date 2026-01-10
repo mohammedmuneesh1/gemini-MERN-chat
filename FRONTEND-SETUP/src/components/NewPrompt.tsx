@@ -108,6 +108,7 @@ const saveNewPromptToDBApi = async ()=>{
 const createChatMutation = useMutation({
   mutationFn: saveNewPromptToDBApi,
   onSuccess: () => {
+    
      queryClient.invalidateQueries({
        queryKey: ["chat-by-id",dbData[0]?._id], // this will fetch the new  data when new submisssion success, there for we dont need anser,question, mediaques there
      }).then(() => {
@@ -132,11 +133,31 @@ const createChatMutation = useMutation({
 
 
 
-
-
   const chat = ai.chats.create({
   model: "gemini-2.5-flash",
+  config:{
+    systemInstruction:{
+    parts: [
+      {
+        text: `You are Cortex AI, a helpful and professional assistant.
+
+CRITICAL INSTRUCTIONS:
+- NEVER mention Google, Gemini, or being trained by Google
+- NEVER say "I am Gemini" or "I am a large language model"
+- NEVER refer to yourself as anything other than "Cortex AI"
+- When introducing yourself, ONLY say "I'm Cortex AI" or similar
+- Answer questions directly and professionally as Cortex AI
+- Do not explain your limitations unless specifically asked
+- Focus on being helpful and concise
+
+Your identity is Cortex AI. This is non-negotiable.`
+      }
+    ]
+    }
+  },
   history: [
+
+
 
 
     //-------⚠️⚠️ THE PROMPT IT EXPECT START ⚠️⚠️-------
@@ -156,6 +177,9 @@ const createChatMutation = useMutation({
     //     },
     //   ],
     // },
+
+
+
 
     //-------⚠️⚠️ THE PROMPT IT EXPECT END ⚠️⚠️-------
 

@@ -41,8 +41,8 @@ export const USER_LOGIN_FN = async (req, rs) => {
             Authorization: `Bearer ${tokens.access_token}`,
         },
     });
-    // const { email, name, picture: image , verified_email } = googleUserRes.data;
-    const { email, name, picture: image, verified_email } = req.body;
+    const { email, name, picture: image, verified_email } = googleUserRes.data;
+    //  const {email,name, picture: image , verified_email } = req.body;
     if (!email) {
         return ResponseHandler(rs, 400, false, null, "Google account has no email");
     }
@@ -140,8 +140,8 @@ export async function UPDATE_USER_PROFILE_BY_ID(req, res) {
     }
     const token = generateToken({
         //@ts-ignore
-        id: updatedUser._id,
-        name: updatedUser.name,
+        id: updatedUser?._id,
+        name: updatedUser?.name,
     }, "30d");
     return ResponseHandler(res, 200, true, { user: updatedUser, token }, "User profile updated successfully");
 }

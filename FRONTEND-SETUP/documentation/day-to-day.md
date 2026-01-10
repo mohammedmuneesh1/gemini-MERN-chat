@@ -300,3 +300,19 @@ const queryClient = new QueryClient()
 
 
 //================================== 04-01-2026 (DAY-5) END ================================== 
+
+
+//================================== 08-01-2026 (DAY-6) START ================================== 
+
+const location = useLocation();
+
+OUTPUT
+{
+  pathname: "/chats/123",
+  search: "?tab=media&page=2",
+  hash: "#top",
+  state: { from: "/login" }, // optional
+  key: "abc123"
+}
+
+//================================== 08-01-2026 (DAY-6) END ================================== 

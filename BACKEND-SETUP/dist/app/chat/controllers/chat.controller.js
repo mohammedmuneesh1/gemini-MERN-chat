@@ -3,7 +3,6 @@ import ChatModel from "../models/chat.schema.js";
 import mongoose from "mongoose";
 import { isValidObjectId } from "mongoose";
 export async function CREATE_NEW_CHAT_CONTROLLER(req, res) {
-    console.log('hello');
     const userId = req?.user?.id;
     if (!userId)
         return ResponseHandler(res, 200, false, null, "User Not Found");
@@ -33,7 +32,7 @@ export async function GET_USER_CHAT_HISTORY_CONTROLLER(req, res) {
     const userChat = await ChatModel.find({
         //@ts-ignore
         userId: userId,
-    }).select("userId title createdAt");
+    }).select("userId title createdAt").sort({ createdAt: -1 });
     return ResponseHandler(res, 200, true, userChat, "Chat History Fetched Successfully");
 }
 export async function GET_USER_CHAT_HISTORY_BY_ID_CONTROLLER(req, res) {
@@ -55,6 +54,39 @@ export async function GET_USER_CHAT_HISTORY_BY_ID_CONTROLLER(req, res) {
 export async function EDIT_EXISTING_CHAT_CONTROLLER(req, res) {
     const { id } = req.params;
     const { question, answer, media } = req.body;
+    console.log('body', req.body);
+    const historyUpdates = [];
+    if (question && question.trim()) {
+        historyUpdates.push({
+            role: "user",
+            parts: [
+                {
+                    text: question.trim(),
+                    ...(media && Object.keys(media).length
+                        ? {
+                            inlineData: {
+                                data: media.filePath,
+                                mimeType: media.fileType,
+                            },
+                        }
+                        : {}),
+                },
+            ],
+        });
+    }
+    if (!answer || !answer.trim()) {
+        return ResponseHandler(res, 200, true, null, "no answer found");
+    }
+    if (answer && answer.trim()) {
+        historyUpdates.push({
+            role: "model",
+            parts: [
+                {
+                    text: answer.trim(),
+                },
+            ],
+        });
+    }
     const updateChat = await ChatModel.findOneAndUpdate({
         // @ts-ignore 
         _id: id
@@ -64,30 +96,7 @@ export async function EDIT_EXISTING_CHAT_CONTROLLER(req, res) {
                 $each: [
                     // ⚠️⚠️ IN INTIAL PHASE, WHEN WE ROUTE FROM DASHBOARD TO /:ID , THE QUESION ALREADY SAVED, THEREFORE /:ID WILL INITLLAY DONT PROVIDE QUESTION, SO DUPLICATION CAN BE AVOIDED
                     //PURPOSE: AVOID DUPLICATION OF QUESTION OR EMPTY QUESTION CRATION (DASHBOARD TO /:ID TIME  IF IINITAL PHASE WE GENERATE ANSWER, THERE FORE TO PREVENT EMPTY QUESION CREATION)
-                    question && question.trim() && {
-                        role: "user",
-                        parts: [
-                            {
-                                text: question,
-                                ...(media && Object.keys(media).length
-                                    ? {
-                                        inlineData: {
-                                            data: media.filePath,
-                                            mimeType: media.fileType,
-                                        },
-                                    }
-                                    : {}),
-                            },
-                        ],
-                    },
-                    {
-                        role: "model",
-                        parts: [
-                            {
-                                text: answer,
-                            },
-                        ],
-                    },
+                    ...historyUpdates,
                 ],
             },
         },

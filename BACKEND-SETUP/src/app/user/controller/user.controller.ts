@@ -46,6 +46,7 @@ export async function USER_LOGIN_DEMO(req: Request, rs: Response) {
 
 
 export const USER_LOGIN_FN = async (req: Request, rs: Response) => {
+
   const { code } = req.body;
 
   if (!code) {
@@ -54,6 +55,7 @@ export const USER_LOGIN_FN = async (req: Request, rs: Response) => {
 
   // 1. Exchange auth code for tokens
   const { tokens } = await googleClient.getToken(code);
+
   googleClient.setCredentials(tokens);
 
   // 2. Fetch Google user info
@@ -66,9 +68,10 @@ export const USER_LOGIN_FN = async (req: Request, rs: Response) => {
     }
   );
 
-  // const { email, name, picture: image , verified_email } = googleUserRes.data;
+  const { email, name, picture: image , verified_email } = googleUserRes.data;
 
-   const {email,name, picture: image , verified_email } = req.body;
+  //  const {email,name, picture: image , verified_email } = req.body;
+
 
 
   if (!email) {
@@ -226,8 +229,8 @@ export async function UPDATE_USER_PROFILE_BY_ID(
   const token = generateToken(
     {
       //@ts-ignore
-      id: updatedUser._id as string,
-      name: updatedUser.name,
+      id: updatedUser?._id as string,
+      name: updatedUser?.name as string,
     },
     "30d"
   );
