@@ -39,6 +39,7 @@ const googleLogin = useGoogleLogin({
     }
 
 catch (error) {
+  
   const backendMessage = errorManagement(error);
   toast.error(backendMessage);
 }

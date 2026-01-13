@@ -54,10 +54,13 @@ export const errorManagement = (error:unknown)=>{
     const backendMessage =
       error.response?.data?.response || // in case you named it differently
       error.message;
+    console.error(backendMessage);
     return backendMessage;
   } else if (error instanceof Error) {
+    console.error(error.message);
     return error.message
   } else {
+    console.error(`Technical issue occured. Please refresh the page and try again later.`);
     return `Technical issue occured. Please refresh the page and try again later.`
   }
 }

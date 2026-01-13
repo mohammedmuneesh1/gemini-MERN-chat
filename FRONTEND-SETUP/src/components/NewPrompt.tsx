@@ -85,16 +85,31 @@ const NewPrompt:React.FC<NewPromptInterface> = ({dbData}) => {
 
 
 //--------------------------------------------------- THIS FUNCTION BASICALLY TO SAVE ON TO THE DB START ---------------------------------------------------
-const saveNewPromptToDBApi = async ()=>{
+const saveNewPromptToDBApi = async ({ques,ans,qMedia}:{ques?:string,ans?:string,qMedia?:{data?:string | null ,mimeType?:string | null } | null })=>{
+
+  // alert(promptAnswer);
+
+  // if(! promptAnswer || promptAnswer.trim()) {
+  //   alert('no answer')
+  // }
+
+  
+  
   const res = await axiosInstance.put(`/api/chats/${dbData[0]?._id}`,{
-    question,
-    answer,
-    ...(quesMedia &&{
+    question:ques,
+    answer:ans,
+    ...(qMedia && Object.keys(qMedia).length &&{
       media:{
-        filePath:quesMedia?.data,
-        fileType:quesMedia?.mimeType,
+        filePath:qMedia?.data ,
+        fileType:qMedia?.mimeType,
       }
     })
+    // ...(quesMedia &&{
+    //   media:{
+    //     filePath:quesMedia?.data,
+    //     fileType:quesMedia?.mimeType,
+    //   }
+    // })
   });
   return res?.data?.data;
 
@@ -135,6 +150,8 @@ const createChatMutation = useMutation({
 
   const chat = ai.chats.create({
   model: "gemini-2.5-flash",
+  // model: "gemini-1.5-flash",
+  //  model: "gemini-2.5-pro",  
   config:{
     systemInstruction:{
     parts: [
@@ -212,6 +229,8 @@ Your identity is Cortex AI. This is non-negotiable.`
 //--------------------------- ⚠️⚠️ API FOR GEMINI , IF RESULT THEN TO  DB FOR SAVING START ⚠️⚠️ ---------------------------
 const newPromptSubmitFn = async (val:string,isIntial:boolean, med?:{filepath:string,mimeType:string})=>{
   
+
+  //val here is the question 
   try {
 
 
@@ -272,8 +291,13 @@ for await (const chunk of result) {
 }
 
 
-createChatMutation.mutate()
+// createChatMutation.mutate()
 
+await createChatMutation.mutateAsync({
+  ques: val, 
+  ans: fullText,
+  qMedia: quesMedia || null,
+});
 //---------------------------- ⚠️ REMEMBER PREVIOUS HISTORY END -------------------------
 
 //---------------------------- ⚠️ THIS PART DONT REMEMBER PREVIOUS  HISTORY START -------------------------
