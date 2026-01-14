@@ -14,7 +14,10 @@ if (!PORT) {
     throw new Error('PORT is not defined');
 }
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:4173/', 'https://gemini-mern-chat.vercel.app/'],
+    origin: ['http://localhost:5173',
+        'http://localhost:4173/',
+        'https://cortextai.vercel.app/'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
