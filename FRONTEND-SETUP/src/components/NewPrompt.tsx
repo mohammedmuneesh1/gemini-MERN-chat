@@ -96,7 +96,7 @@ const saveNewPromptToDBApi = async ({ques,ans,qMedia}:{ques?:string,ans?:string,
   
   
   const res = await axiosInstance.put(`/api/chats/${dbData[0]?._id}`,{
-    question:ques,
+    question:dbData && dbData?.length && dbData[0]?.history && dbData[0]?.history?.length === 1  && dbData[0]?.history[0]?.role === "user" ? "" : ques,
     answer:ans,
     ...(qMedia && Object.keys(qMedia).length &&{
       media:{
