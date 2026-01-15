@@ -14,7 +14,9 @@ if (!PORT) {
     throw new Error('PORT is not defined');
 }
 app.use(cors({
-    origin: ['http://localhost:5173',
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:5174',
         'http://localhost:4173',
         'https://cortextai.vercel.app'
     ],

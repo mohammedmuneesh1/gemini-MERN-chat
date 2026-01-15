@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { generateTitle } from '../utils/generateTitle'
 import toast from 'react-hot-toast'
@@ -37,12 +37,12 @@ const ChatList = () => {
 });
 
 
-if (isError) {
-  toast.error(error.message);
-}
 
-
-
+useEffect(() => {
+  if (isError) {
+    toast.error(error.message);
+  }
+}, [isError, error]);
 
   // const fetchChatListApi = async ()=>{
   //   try {
@@ -183,37 +183,3 @@ if (isError) {
 
 export default ChatList
 
-
-
-
-const chatTitles = [
-  "Fixing JWT Auth Bug",
-  "MongoDB Aggregation Help",
-  "Why My API Returns 500",
-  "React Router Confusion",
-  "Admin Dashboard Logic",
-  "Tailwind Layout Issue",
-  "Token Expiry Explained",
-  "Debugging Backend Error",
-  "UI Bug Investigation",
-  "Optimizing Database Query",
-  "Explain This Code",
-  "Why Is This Undefined?",
-  "Auth Flow Review",
-  "Fixing TypeScript Error",
-  "Help Me Debug This",
-  "MongoDB Aggregation Help",
-  "Why My API Returns 500",
-  "React Router Confusion",
-  "Admin Dashboard Logic",
-  "Tailwind Layout Issue",
-  "Token Expiry Explained",
-  "Debugging Backend Error",
-  "UI Bug Investigation",
-  "Optimizing Database Query",
-  "Explain This Code",
-  "Why Is This Undefined?",
-  "Auth Flow Review",
-  "Fixing TypeScript Error",
-  "Help Me Debug This",
-];

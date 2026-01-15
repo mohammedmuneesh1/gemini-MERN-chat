@@ -128,6 +128,7 @@ const Upload:React.FC<UploadInterface> = ({setImg}) => {
     <IKUpload 
       id="imagekit-upload" // Match this with label's htmlFor
       fileName="test-upload.png"
+      accept="image/*"
       useUniqueFileName={true}
       onUploadProgress={onUploadProgress}
       onUploadStart={onUploadStart}

@@ -93,6 +93,8 @@ const saveNewPromptToDBApi = async ({ques,ans,qMedia}:{ques?:string,ans?:string,
   //   alert('no answer')
   // }
 
+
+  console.log('qMedia',qMedia);
   
   
   const res = await axiosInstance.put(`/api/chats/${dbData[0]?._id}`,{
@@ -227,7 +229,7 @@ Your identity is Cortex AI. This is non-negotiable.`
 
 
 //--------------------------- ⚠️⚠️ API FOR GEMINI , IF RESULT THEN TO  DB FOR SAVING START ⚠️⚠️ ---------------------------
-const newPromptSubmitFn = async (val:string,isIntial:boolean, med?:{filepath:string,mimeType:string})=>{
+const newPromptSubmitFn = async (val:string)=>{
   
 
   //val here is the question 
@@ -238,13 +240,24 @@ const newPromptSubmitFn = async (val:string,isIntial:boolean, med?:{filepath:str
      //⚠️⚠️ initial means if its a first question (like dashbord to /:id page time ) then  
      // dont set question becauese question already saved to db on the dashboard time and now
      //  we just routing to /:id ⚠️⚠️
-    if(!isIntial){   // if not initial set question and media otherwise it avialable on the db
+
+
+     const imageData =img.dbData ? {
+       data:img.dbData?.filePath,
+       mimeType:img?.dbData?.fileType
+     }:null;
+
+     
+
+    if(dbData && dbData?.length && dbData[0]?.history && dbData[0]?.history?.length > 1  && dbData[0]?.history[0]?.role === "user" ){   // if not initial set question and media otherwise it avialable on the db
       setQuestion(val);
-          setQuesMedia({
-        data:img.dbData?.filePath,
-        mimeType:img?.dbData?.fileType,
-      });
+      setQuesMedia(imageData);
+      //     setQuesMedia({
+      //   data:img.dbData?.filePath,
+      //   mimeType:img?.dbData?.fileType,
+      // });
     }
+
     //if image exist pass it (base64 + text), if not just text only 
 
 //---------------------------- ⚠️ REMEMBER PREVIOUS HISTORY START -------------------------
@@ -282,6 +295,7 @@ const result = await chat.sendMessageStream({
 });
 
 let fullText = "";
+
 for await (const chunk of result) {
    const text = chunk.text;
    if (text) {
@@ -296,7 +310,7 @@ for await (const chunk of result) {
 await createChatMutation.mutateAsync({
   ques: val, 
   ans: fullText,
-  qMedia: quesMedia || null,
+  qMedia: imageData || null,
 });
 //---------------------------- ⚠️ REMEMBER PREVIOUS HISTORY END -------------------------
 
@@ -327,7 +341,7 @@ const formHandleSubmitFn = async (e:React.FormEvent<HTMLFormElement>)=>{
   const prompt = (e.target as HTMLFormElement).text.value;
   if(!prompt) return
 
-   newPromptSubmitFn(prompt,false);
+   newPromptSubmitFn(prompt);
    return  form.reset();
 };
 
@@ -343,7 +357,7 @@ const hasInitialRun = useRef<boolean>(false);
 useEffect(()=>{
   if(!hasInitialRun?.current){
     if(dbData && dbData?.length && dbData[0]?.history && dbData[0]?.history?.length === 1  && dbData[0]?.history[0]?.role === "user" ) {
-      newPromptSubmitFn(dbData[0]?.history[0]?.parts[0]?.text as string,true);
+      newPromptSubmitFn(dbData[0]?.history[0]?.parts[0]?.text as string);
     }
   }
   hasInitialRun.current = true
@@ -374,7 +388,7 @@ useEffect(()=>{
             {/*QUESTION AND ANSWER  START */}
             <div>
 
-      {/* Q-S */}
+      {/* THIS QUESTION IS TO SHOW ON THE  CHATPAGE SIDE NOT ON THE INPUT BOX Q-S START */}
 
       {
         question && (
@@ -400,6 +414,7 @@ useEffect(()=>{
               )
             }
 
+{/* THIS QUESTION IS TO SHOW ON THE  CHATPAGE SIDE NOT ON THE INPUT BOX Q-S END */}
 
 {/* CHANGE THE COLOR  bg-[#2c2937]  CHANGE TO BG-RED-400 TO CHECK THE INVALIDATION OF EXISTING GETR REQUEST AND GETTING NEW ONE  */}
            <div className="bg-[#2c2937] rounded-[20px] 
@@ -415,7 +430,6 @@ useEffect(()=>{
         )
       }
       {/* Q-E */}
-
 
 
 
