@@ -7,6 +7,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import LoginModal from "../../components/LoginModal";
+import UserMenuButton from "../../components/UserMenuButton";
 
 
 const queryClient = new QueryClient()
@@ -61,7 +62,9 @@ const RootLayout = () => {
                           return (
                             <div className="flex items-center gap-2">
 
-<button
+                              <UserMenuButton decoded={decoded}/>
+
+{/* <button
 onClick={()=>navigate("/dashboard")}
   className="
   cursor-pointer
@@ -87,7 +90,7 @@ onClick={()=>navigate("/dashboard")}
   "
 >
                                 {decoded ? decoded?.name : ""}
-</button>
+</button> */}
                               {/* <img 
                             src={decoded.picture} 
                             alt="avatar"
